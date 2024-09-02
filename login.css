@@ -1,10 +1,11 @@
-.logo img{
+/* General Styles */
+.logo img {
     margin-right: 13px;
     width: 90px;
     padding: 18px;
 }
 
-.box{
+.box {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -15,11 +16,11 @@
     margin-bottom: 30px;
 }
 
-.h1{
+.h1 {
     padding-bottom: 30px;
 }
 
-.buttons{
+.buttons {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -27,7 +28,7 @@
     gap: 10px;
 }
 
-.buttons button{
+.buttons button {
     width: 335px;
     height: 50px;
     background-color: #121212;
@@ -41,34 +42,34 @@
 .txt {
     display: flex;
     align-items: center;
-    justify-content: center; /* Keeps the text centered */
-    position: relative; /* Necessary for absolute positioning of the logo */
+    justify-content: center;
+    position: relative;
     font-weight: 500;
     font-size: 16px;
-    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .img-btn {
     width: 20px;
     position: absolute;
-    left: 30px; /* Positions the logo to the left inside the button */
+    left: 30px;
 }
 
-button:hover{
+button:hover {
     border: solid white;
     border-width: thin;
 }
 
-.line{
+.line {
     margin: 30px 0 35px;
     height: 1px;
     width: 40vw;
-    background-color:rgba(255, 255, 255, 0.116);
+    background-color: rgba(255, 255, 255, 0.116);
 }
 
 .typeform input {
+    margin-bottom: 10px;
     width: 332px;
-    /* max-width: 502px; */
     padding: 12px;
     border: solid rgba(255, 255, 255, 0.528);
     border-width: 0.1px;
@@ -78,33 +79,31 @@ button:hover{
     box-sizing: border-box;
 }
 
-.password{
-    margin-bottom: 3px;
-}
-
-.e{
+.e {
     margin: 0 0 8px;
     font-weight: 500;
     font-size: 15px;
-    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-input[type="email"]:hover, input[type="password"]:hover {
+input:hover {
     border: solid white;
     border-width: thin;
     box-sizing: border-box;
 }
 
-.password{
-    margin-top: 3px;
+.rem-switch {
+    display: flex;
+    align-items: center;
+    margin-right: 215px;
 }
 
 .switch {
     position: relative;
-    width: 30px; /* Further reduced width */
-    height: 16px; /* Further reduced height */
+    width: 30px;
+    height: 16px;
     display: flex;
-    margin-right: 8px; /* Added margin to create space between switch and text */
+    margin-right: 8px;
 }
 
 .toggle-checkbox {
@@ -120,7 +119,7 @@ input[type="email"]:hover, input[type="password"]:hover {
     right: 0;
     bottom: 0;
     background-color: #555;
-    border-radius: 16px; /* Adjusted for smaller height */
+    border-radius: 16px;
     cursor: pointer;
     transition: background-color 0.4s;
 }
@@ -128,8 +127,8 @@ input[type="email"]:hover, input[type="password"]:hover {
 .toggle-label::before {
     content: "";
     position: absolute;
-    height: 12px; /* Further reduced size */
-    width: 12px; /* Further reduced size */
+    height: 12px;
+    width: 12px;
     left: 2px;
     bottom: 2px;
     background-color: black;
@@ -142,23 +141,17 @@ input[type="email"]:hover, input[type="password"]:hover {
 }
 
 .toggle-checkbox:checked + .toggle-label::before {
-    transform: translateX(14px); /* Adjusted for smaller width */
+    transform: translateX(14px);
 }
 
 .remember {
     font-size: 12px;
-    margin-left: 0; /* Removed margin to align it closer to the switch */
+    margin-left: 0;
     margin-top: 1.3px;
-    line-height: 16px; /* Aligns text vertically with the switch */
+    line-height: 16px;
 }
 
-.rem-switch {
-    display: flex;
-    align-items: center; /* Vertically aligns the text and switch */
-    margin-right: 227px;
-}
-
-.login{
+.login {
     margin-top: 40px;
 }
 
@@ -170,8 +163,8 @@ input[type="email"]:hover, input[type="password"]:hover {
     border-width: 0.1px;
     border-radius: 30px;
     cursor: pointer;
-    transition: background-color 0.3s; /* Add transition for transform */
-    overflow: hidden; /* Ensure content doesn’t overflow */
+    transition: background-color 0.3s;
+    overflow: hidden;
     margin-bottom: 30px;
 }
 
@@ -180,7 +173,7 @@ input[type="email"]:hover, input[type="password"]:hover {
     align-items: center;
     justify-content: center;
     font-size: 16px;
-    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: black;
     font-weight: bold;
 }
@@ -188,46 +181,142 @@ input[type="email"]:hover, input[type="password"]:hover {
 .login button:hover {
     background-color: #3be477;
     border: none;
-    transform: scale(1.02); /* Adjust the scale factor as needed */
-    transform-origin: center; /* Scale from the center */
+    transform: scale(1.02);
+    transform-origin: center;
 }
 
-.login button:hover .txt-log {
-    font-size: 16.4px; /* Increase font size on hover */
-}
-
-.forget a, .warn a{
+.forget a, .warn a {
     color: white;
 }
 
-.forget a:hover{
+.forget a:hover {
     color: #00C853;
 }
 
-.warn{
+.warn {
     margin-top: 30px;
     margin-bottom: 65px;
 }
 
-.warn-txt{
-    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+.warn-txt {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: #b3b3b3;
 }
 
-.box2{
+.box2 {
     padding: 30px;
     background-color: #121212;
 }
 
-.rights{
+.rights {
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 13px;
     color: #b3b3b3;
-    white-space: nowrap; /* Prevents line breaks */
+    white-space: nowrap;
 }
 
-  .rights a {
-    display: inline; /* Ensures <a> tags are inline */
-  }
+.rights a {
+    display: inline;
+}
+
+/* Media Queries for 1200px and 500px */
+@media only screen and (max-width: 1200px) {
+    .box {
+        margin: 20px 70px;
+    }
+
+    .buttons button{
+        width: 420px;
+    }
+
+    .login button {
+        width: 300px;
+    }
+
+    .line {
+        width: 60vw;
+    }
+
+    .typeform input {
+        width: 350px;
+    }
+
+    .rem-switch{
+        margin-right: 229px;
+    }
+}
+
+@media only screen and (max-width: 500px) {
+    .box {
+        background-color: black;
+        margin: -16px 20px;
+        padding: 20px;
+    }
+
+    .logo img {
+        width: 60px;
+    }
+
+    .buttons button, .login button {
+        width: 106%;
+        font-size: 14px;
+        padding: 0 10px;
+    }
+
+    .login button {
+        width: 200px;
+        font-size: 14px;
+        padding: 0 10px;
+    }
+
+    .txt {
+        font-size: 14px;
+    }
+
+    .img-btn {
+        width: 16px;
+        left: 10px;
+    }
+
+    .line {
+        margin: 26px;
+        width: 80vw;
+    }
+
+    .typeform input {
+        width: 237px;
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    .rem-switch {
+        margin-right: 130px;
+        /* justify-content: space-between; */
+        /* width: 100%; */
+    }
+
+    .remember {
+        font-size: 10px;
+    }
+
+    .login {
+        margin-top: 20px;
+    }
+
+    .rights {
+        text-align: center;
+        font-size: 7px;
+        padding: 10px;
+    }
+
+    .warn {
+        display: flex;
+        margin-top: 20px;
+        margin-bottom: 40px;
+        flex-direction: column;
+        justify-content: space-evenly;
+        align-items: center;
+    }
+}

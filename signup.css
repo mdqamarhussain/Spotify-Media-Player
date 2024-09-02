@@ -1,0 +1,310 @@
+/* General Styles */
+body {
+    background-color: #000000f0;
+}
+
+.logo img {
+    margin-right: 13px;
+    width: 90px;
+    padding: 18px;
+}
+
+.box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin: 20px 300px;
+    background-color: #1212126b;
+    border-radius: 10px;
+    margin-bottom: 30px;
+}
+
+/* Centering the text in the h1 */
+.h1 {
+    padding-bottom: 30px;
+    text-align: center; /* Centering the text */
+}
+
+.h1 h1 {
+    font-size: 40px;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    display: block; /* block element to respect the parent centering */
+    margin: 0 auto; /* Ensuring that it aligns centrally */
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.buttons button {
+    width: 335px;
+    height: 50px;
+    background-color: #121212;
+    border: solid rgba(255, 255, 255, 0.528);
+    color: white;
+    border-width: 0.1px;
+    border-radius: 30px;
+    cursor: pointer;
+}
+
+.txt {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    font-weight: 500;
+    font-size: 16px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.img-btn {
+    width: 20px;
+    position: absolute;
+    left: 30px;
+}
+
+button:hover {
+    border: solid white;
+    border-width: thin;
+}
+
+.line {
+    margin: 30px 0 33px;
+    height: 1px;
+    width: 9.5vw;
+    background-color: rgba(255, 255, 255, 0.338);
+}
+
+.line2 {
+    margin: 30px;
+    height: 1px;
+    width: 22vw;
+    background-color: rgba(255, 255, 255, 0.116);
+}
+
+.or {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.typeform input {
+    margin-bottom: 10px;
+    width: 332px;
+    padding: 12px;
+    border: solid rgba(255, 255, 255, 0.528);
+    border-width: 0.1px;
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: #121212;
+    box-sizing: border-box;
+    color: white;
+}
+
+.e {
+    margin: 0 0 8px;
+    font-weight: 500;
+    font-size: 15px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+input:hover {
+    border: solid white;
+    border-width: thin;
+    box-sizing: border-box;
+}
+
+.login {
+    margin-top: 40px;
+}
+
+.login button {
+    margin-top: -13px;
+    width: 335px;
+    height: 50px;
+    background-color: #00C853;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.txt-log {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: black;
+    font-weight: bold;
+}
+
+.login button:hover {
+    background-color: #3be477;
+}
+
+.forget a, .warn a {
+    font-size: 15px;
+    margin-right: 175px;
+    color: hsl(145, 100%, 39%);
+}
+
+.warn {
+    margin-bottom: 38px;
+}
+
+.warn a {
+    margin-right: unset;
+}
+
+.warn-txt {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #b3b3b3;
+}
+
+.box2 {
+    padding: 30px;
+    background-color: #121212;
+}
+
+.rights {
+    background-color: #1212126b;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 13px;
+    color: #b3b3b3;
+    white-space: nowrap;
+}
+
+.rights a {
+    display: inline;
+}
+
+/* Media Queries for 1200px and 500px */
+@media only screen and (max-width: 1200px) {
+    .box {
+        margin: 20px 70px;
+    }
+
+    .buttons button {
+        width: 420px;
+    }
+
+    .login button {
+        width: 335px;
+    }
+
+    .line {
+        width: 220px;
+    }
+
+    .line2{
+        width: 422px;
+    }
+
+    .typeform input {
+        width: 350px;
+    }
+
+    .rem-switch {
+        margin-right: 229px;
+    }
+
+    .forget a{
+        margin-right: 192px;
+    }
+
+    .rights{
+        font-size: 11px;
+    }
+}
+
+@media only screen and (max-width: 500px) {
+
+    .body{
+        background: black;
+    }
+
+    .box {
+        background-color: #1212126b;
+        margin: -16px 20px;
+        padding: 20px;
+    }
+
+    .h1 h1{
+        font-size: 30px;
+    }
+
+    .logo img {
+        width: 60px;
+    }
+
+    .buttons button, .login button {
+        width: 160%;
+        font-size: 14px;
+        padding: 0 10px;
+    }
+
+    .forget a{
+        margin-right: 80px;
+    }
+
+    .login button {
+        width: 240px;
+        font-size: 14px;
+        padding: 0 10px;
+        margin-top: 2px;
+    }
+
+    .txt {
+        font-size: 14px;
+    }
+
+    .img-btn {
+        width: 16px;
+        left: 10px;
+    }
+
+    .line {
+        margin: 26px;
+        width: 92px;
+    }
+
+    .line2{
+        width: 270px;
+    }
+
+    .typeform input {
+        width: 237px;
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    .rem-switch {
+        margin-right: 130px;
+    }
+
+    .remember {
+        font-size: 10px;
+    }
+
+    .login {
+        margin-top: 20px;
+    }
+
+    .rights {
+        text-align: center;
+        font-size: 7px;
+        padding: 10px;
+    }
+
+    .warn a {
+        font-size: 12px;
+    }
+}

@@ -9,14 +9,54 @@ A sleek, web-based music player inspired by Spotify, allowing you to browse, pla
 - **Interactive UI** ✨: Dynamic user interface with hover effects and animations.
 - **Song Metadata** 📝: Displays song information and album covers.
 - **Seekbar and Volume Control** 🔊: Navigate through songs and adjust the volume easily.
+- **GitHub Pages Compatible** 🌐: Now works perfectly with GitHub Pages hosting!
 
 ## Technologies Used 💻
 - **HTML5** 📝: Structuring the web pages.
-- **CSS3** 🎨: Styling and responsive design.
+- **CSS3** 🎨: Styling and responsive design.  
 - **JavaScript** ⚙️: Interactivity and audio control.
-- **Fetch API** 🌐: Fetching song data and playlists.
+- **Static JSON Catalog** 📊: Song catalog system for GitHub Pages compatibility.
 
-## Getting Started 🚀
+## GitHub Pages Hosting Fix 🔧
+This project has been updated to work with GitHub Pages hosting. The main changes include:
+- Replaced dynamic directory listing with a static `songs-catalog.json` file
+- Fixed all absolute paths to use relative paths
+- Removed dependency on Apache `.htaccess` files
+
+## Adding New Songs and Albums �
+To add new songs and albums:
+
+1. **Create a new folder** in the `songs/` directory (e.g., `songs/rock/`)
+2. **Add your songs** (.mp3 files) to the folder
+3. **Add a cover image** named `cover.jpg` to the folder
+4. **Create an `info.json`** file in the folder with album metadata:
+   ```json
+   {
+     "title": "Rock Classics",
+     "description": "Best rock songs of all time"
+   }
+   ```
+5. **Update `songs-catalog.json`** to include your new album:
+   ```json
+   {
+     "albums": [
+       {
+         "folder": "fav",
+         "title": "Favourite",
+         "description": "Your favourite playlists! ~ Delusion.",
+         "cover": "songs/fav/cover.jpg",
+         "songs": ["I Love You.mp3", "Jannatein Kahan.mp3", "Mat Aazma Re.mp3", "Mere Mehboob Qayamat Hogi.mp3"]
+       },
+       {
+         "folder": "rock",
+         "title": "Rock Classics", 
+         "description": "Best rock songs of all time",
+         "cover": "songs/rock/cover.jpg",
+         "songs": ["Song1.mp3", "Song2.mp3", "Song3.mp3"]
+       }
+     ]
+   }
+   ```## Getting Started 🚀
 1. **Clone the Repository**:
    ```bash
    git clone https://github.com/yourusername/spotify-media-player.git

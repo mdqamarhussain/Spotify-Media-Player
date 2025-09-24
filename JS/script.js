@@ -19,18 +19,13 @@ function secondsToMinutesSeconds(seconds) {
 
 async function getSongs(folder) {
     currFolder = folder;
-    let a = await fetch(`/${folder}/`);
-    let response = await a.text();
-    let div = document.createElement("div");
-    div.innerHTML = response;
-    let as = div.getElementsByTagName("a");
-    songs = [];
-    for (let index = 0; index < as.length; index++) {
-        const element = as[index];
-        if (element.href.endsWith(".mp3")) {
-            songs.push(element.href.split(`/${folder}/`)[1]);
-        }
-    }
+    // Load songs from catalog instead of directory listing
+    let catalogResponse = await fetch('./songs-catalog.json');
+    let catalog = await catalogResponse.json();
+    
+    // Find the album in the catalog
+    let album = catalog.albums.find(a => `songs/${a.folder}` === folder);
+    songs = album ? album.songs : [];
 
     // Show all the songs in the playlist
     let songUL = document.querySelector(".songlist ul");
@@ -62,7 +57,7 @@ async function getSongs(folder) {
 }
 
 const playMusic = (track, pause = false) => {
-    currentSong.src = `/${currFolder}/` + track;
+    currentSong.src = `./${currFolder}/` + track;
     if (!pause) {
         currentSong.play();
         play.src = "img/pause.svg";
@@ -73,34 +68,23 @@ const playMusic = (track, pause = false) => {
 
 async function displayAlbums() {
     console.log("displaying albums");
-    let a = await fetch(`/songs/`);
-    let response = await a.text();
-    let div = document.createElement("div");
-    div.innerHTML = response;
-    let anchors = div.getElementsByTagName("a");
+    // Load albums from catalog instead of directory listing
+    let catalogResponse = await fetch('./songs-catalog.json');
+    let catalog = await catalogResponse.json();
     let cardContainer = document.querySelector(".cardContainer");
-    let array = Array.from(anchors);
-    for (let index = 0; index < array.length; index++) {
-        const e = array[index];
-
-        if (e.pathname.startsWith("/songs/") && e.pathname !== "/songs" && !e.href.includes(".htaccess")) {
-            let folder = e.pathname.split("/").slice(-2)[0];
-            // Get the metadata of the folder
-            let a = await fetch(`/songs/${folder}/info.json`);
-            let response = await a.json();
-
-            cardContainer.innerHTML += `
-                <div data-folder="${folder}" class="card">
-                    <div class="play">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M5 20V4L19 12L5 20Z" stroke="#141B34" fill="#000" stroke-width="1.5" stroke-linejoin="round" />
-                        </svg>
-                    </div>
-                    <img src="/songs/${folder}/cover.jpg" alt="">
-                    <h2>${response.title}</h2>
-                    <p>${response.description}</p>
-                </div>`;
-        }
+    
+    for (const album of catalog.albums) {
+        cardContainer.innerHTML += `
+            <div data-folder="${album.folder}" class="card">
+                <div class="play">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M5 20V4L19 12L5 20Z" stroke="#141B34" fill="#000" stroke-width="1.5" stroke-linejoin="round" />
+                    </svg>
+                </div>
+                <img src="${album.cover}" alt="">
+                <h2>${album.title}</h2>
+                <p>${album.description}</p>
+            </div>`;
     }
 
     // Load the playlist whenever card is clicked
@@ -116,7 +100,9 @@ async function displayAlbums() {
 async function main() {
     // Get the list of all the songs
     await getSongs("songs/fav");
-    playMusic(songs[0], true);
+    if (songs.length > 0) {
+        playMusic(songs[0], true);
+    }
 
     // Display all the albums on the page
     await displayAlbums();

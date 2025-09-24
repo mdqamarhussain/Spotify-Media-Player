@@ -2,6 +2,7 @@ console.log('Lets write JavaScript');
 let currentSong = new Audio();
 let songs;
 let currFolder;
+let currentSongIndex = 0;
 
 function secondsToMinutesSeconds(seconds) {
     if (isNaN(seconds) || seconds < 0) {
@@ -49,7 +50,8 @@ async function getSongs(folder) {
     // Attach an event listener to each song
     Array.from(document.querySelector(".songlist").getElementsByTagName("li")).forEach(e => {
         e.addEventListener("click", () => {
-            playMusic(e.querySelector(".info").firstElementChild.innerHTML.trim() + ".mp3");  // Add the .mp3 extension back
+            const songName = e.querySelector(".info").firstElementChild.innerHTML.trim() + ".mp3";
+            playMusic(songName);  // Add the .mp3 extension back
         });
     });
 
@@ -58,12 +60,24 @@ async function getSongs(folder) {
 
 const playMusic = (track, pause = false) => {
     currentSong.src = `./${currFolder}/` + track;
+    currentSongIndex = songs.indexOf(track);
     if (!pause) {
         currentSong.play();
-        play.src = "img/pause.svg";
+        const playBtn = document.getElementById('play');
+        if (playBtn) playBtn.src = "img/pause.svg";
     }
-    document.querySelector(".songinfo").innerHTML = decodeURI(track).replace(".mp3", "");  // Remove the .mp3 extension
+    
+    // Update song info display
+    document.querySelector(".songinfo").innerHTML = decodeURI(track).replace(".mp3", "");
     document.querySelector(".songtime").innerHTML = "00:00 / 00:00";
+    
+    // Highlight current song in playlist
+    const songListItems = document.querySelector(".songlist").getElementsByTagName("li");
+    Array.from(songListItems).forEach((li, index) => {
+        li.style.backgroundColor = index === currentSongIndex ? "rgba(255, 255, 255, 0.1)" : "";
+    });
+    
+    console.log(`Now playing: ${track} (index: ${currentSongIndex})`);
 }
 
 async function displayAlbums() {
@@ -92,12 +106,19 @@ async function displayAlbums() {
         e.addEventListener("click", async item => {
             console.log("Fetching Songs");
             songs = await getSongs(`songs/${item.currentTarget.dataset.folder}`);
-            playMusic(songs[0]);
+            if (songs.length > 0) {
+                playMusic(songs[0]);
+            }
         });
     });
 }
 
 async function main() {
+    // Get references to control elements
+    const play = document.getElementById('play');
+    const previous = document.getElementById('previous');
+    const next = document.getElementById('next');
+
     // Get the list of all the songs
     await getSongs("songs/fav");
     if (songs.length > 0) {
@@ -124,6 +145,14 @@ async function main() {
         document.querySelector(".circle").style.left = (currentSong.currentTime / currentSong.duration) * 100 + "%";
     });
 
+    // Auto-play next song when current song ends
+    currentSong.addEventListener("ended", () => {
+        console.log("Song ended, playing next");
+        if ((currentSongIndex + 1) < songs.length) {
+            playMusic(songs[currentSongIndex + 1]);
+        }
+    });
+
     // Add an event listener to seekbar
     document.querySelector(".seekbar").addEventListener("click", e => {
         let percent = (e.offsetX / e.target.getBoundingClientRect().width) * 100;
@@ -144,20 +173,18 @@ async function main() {
     // Add an event listener to previous
     previous.addEventListener("click", () => {
         currentSong.pause();
-        console.log("Previous clicked");
-        let index = songs.indexOf(currentSong.src.split("/").slice(-1)[0]);
-        if ((index - 1) >= 0) {
-            playMusic(songs[index - 1]);
+        console.log("Previous clicked, current index:", currentSongIndex);
+        if ((currentSongIndex - 1) >= 0) {
+            playMusic(songs[currentSongIndex - 1]);
         }
     });
 
     // Add an event listener to next
     next.addEventListener("click", () => {
         currentSong.pause();
-        console.log("Next clicked");
-        let index = songs.indexOf(currentSong.src.split("/").slice(-1)[0]);
-        if ((index + 1) < songs.length) {
-            playMusic(songs[index + 1]);
+        console.log("Next clicked, current index:", currentSongIndex);
+        if ((currentSongIndex + 1) < songs.length) {
+            playMusic(songs[currentSongIndex + 1]);
         }
     });
 

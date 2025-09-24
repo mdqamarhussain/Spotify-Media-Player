@@ -1,8 +1,14 @@
 console.log('Lets write JavaScript');
 let currentSong = new Audio();
+// Optimize audio loading - only load metadata initially
+currentSong.preload = 'metadata';
 let songs;
 let currFolder;
 let currentSongIndex = 0;
+
+// Preload management
+let preloadedSongs = new Map();
+let nextSongPreloader = null;
 
 function secondsToMinutesSeconds(seconds) {
     if (isNaN(seconds) || seconds < 0) {
@@ -75,12 +81,20 @@ const playMusic = (track, pause = false) => {
     currentSong.pause();
     currentSong.currentTime = 0;
     
+    // Show loading state
+    const songInfoElement = document.querySelector(".songinfo");
+    const songTimeElement = document.querySelector(".songtime");
+    
+    songInfoElement.innerHTML = `Loading... ${decodeURI(track).replace(".mp3", "")}`;
+    songInfoElement.classList.add('loading');
+    songTimeElement.innerHTML = "Loading...";
+    songTimeElement.classList.add('loading');
+    
+    const playBtn = document.getElementById('play');
+    if (playBtn) playBtn.src = "img/play.svg";
+    
     currentSong.src = `./${currFolder}/` + track;
     currentSongIndex = songs.indexOf(track);
-    
-    // Update song info display immediately
-    document.querySelector(".songinfo").innerHTML = decodeURI(track).replace(".mp3", "");
-    document.querySelector(".songtime").innerHTML = "00:00 / 00:00";
     
     // Highlight current song in playlist
     const songListItems = document.querySelector(".songlist").getElementsByTagName("li");
@@ -88,18 +102,61 @@ const playMusic = (track, pause = false) => {
         li.style.backgroundColor = index === currentSongIndex ? "rgba(255, 255, 255, 0.1)" : "";
     });
     
-    if (!pause) {
-        // Use a promise to handle play() properly
-        currentSong.play().then(() => {
-            const playBtn = document.getElementById('play');
-            if (playBtn) playBtn.src = "img/pause.svg";
-        }).catch(error => {
-            console.log("Play interrupted:", error);
-            // This is normal when switching songs quickly
-        });
-    }
+    // Handle when enough data is loaded to play
+    const onCanPlay = () => {
+        const songInfoElement = document.querySelector(".songinfo");
+        const songTimeElement = document.querySelector(".songtime");
+        
+        songInfoElement.innerHTML = decodeURI(track).replace(".mp3", "");
+        songInfoElement.classList.remove('loading');
+        songTimeElement.innerHTML = "00:00 / 00:00";
+        songTimeElement.classList.remove('loading');
+        
+        if (!pause) {
+            currentSong.play().then(() => {
+                if (playBtn) playBtn.src = "img/pause.svg";
+            }).catch(error => {
+                console.log("Play interrupted:", error);
+            });
+        }
+        
+        // Preload next song
+        preloadNextSong();
+        
+        // Remove event listener
+        currentSong.removeEventListener('canplay', onCanPlay);
+    };
+    
+    currentSong.addEventListener('canplay', onCanPlay);
     
     console.log(`Now playing: ${track} (index: ${currentSongIndex})`);
+}
+
+// Function to preload the next song
+const preloadNextSong = () => {
+    if (currentSongIndex + 1 < songs.length) {
+        const nextTrack = songs[currentSongIndex + 1];
+        const nextSongPath = `./${currFolder}/${nextTrack}`;
+        
+        if (!preloadedSongs.has(nextSongPath)) {
+            if (nextSongPreloader) {
+                nextSongPreloader.src = '';
+            }
+            
+            nextSongPreloader = new Audio();
+            nextSongPreloader.preload = 'auto';
+            nextSongPreloader.src = nextSongPath;
+            
+            nextSongPreloader.addEventListener('canplaythrough', () => {
+                preloadedSongs.set(nextSongPath, nextSongPreloader);
+                console.log(`Preloaded: ${nextTrack}`);
+            });
+            
+            nextSongPreloader.addEventListener('error', () => {
+                console.log(`Failed to preload: ${nextTrack}`);
+            });
+        }
+    }
 }
 
 async function displayAlbums() {
@@ -157,11 +214,27 @@ async function main() {
     currentSong.addEventListener("error", (e) => {
         console.error("Audio error:", e);
         play.src = "img/play.svg";
+        document.querySelector(".songinfo").innerHTML = "Error loading song";
     });
 
-    // Add loadstart event to handle loading states
+    // Add loading progress events
     currentSong.addEventListener("loadstart", () => {
         console.log("Loading audio...");
+    });
+
+    currentSong.addEventListener("progress", () => {
+        if (currentSong.buffered.length > 0) {
+            const bufferedEnd = currentSong.buffered.end(currentSong.buffered.length - 1);
+            const duration = currentSong.duration;
+            if (duration > 0) {
+                const percent = Math.round((bufferedEnd / duration) * 100);
+                console.log(`Loading progress: ${percent}%`);
+            }
+        }
+    });
+
+    currentSong.addEventListener("canplay", () => {
+        console.log("Audio ready to play");
     });
 
     // Get the list of all the songs

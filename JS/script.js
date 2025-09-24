@@ -20,13 +20,25 @@ function secondsToMinutesSeconds(seconds) {
 
 async function getSongs(folder) {
     currFolder = folder;
-    // Load songs from catalog instead of directory listing
-    let catalogResponse = await fetch('./songs-catalog.json');
-    let catalog = await catalogResponse.json();
-    
-    // Find the album in the catalog
-    let album = catalog.albums.find(a => `songs/${a.folder}` === folder);
-    songs = album ? album.songs : [];
+    try {
+        // Load songs from catalog instead of directory listing
+        let catalogResponse = await fetch('./songs-catalog.json');
+        if (!catalogResponse.ok) {
+            throw new Error(`Failed to load catalog: ${catalogResponse.status}`);
+        }
+        let catalog = await catalogResponse.json();
+        
+        // Find the album in the catalog
+        let album = catalog.albums.find(a => `songs/${a.folder}` === folder);
+        songs = album ? album.songs : [];
+        
+        if (songs.length === 0) {
+            console.warn(`No songs found for folder: ${folder}`);
+        }
+    } catch (error) {
+        console.error("Error loading songs:", error);
+        songs = [];
+    }
 
     // Show all the songs in the playlist
     let songUL = document.querySelector(".songlist ul");
@@ -59,15 +71,14 @@ async function getSongs(folder) {
 }
 
 const playMusic = (track, pause = false) => {
+    // Stop and reset current song first
+    currentSong.pause();
+    currentSong.currentTime = 0;
+    
     currentSong.src = `./${currFolder}/` + track;
     currentSongIndex = songs.indexOf(track);
-    if (!pause) {
-        currentSong.play();
-        const playBtn = document.getElementById('play');
-        if (playBtn) playBtn.src = "img/pause.svg";
-    }
     
-    // Update song info display
+    // Update song info display immediately
     document.querySelector(".songinfo").innerHTML = decodeURI(track).replace(".mp3", "");
     document.querySelector(".songtime").innerHTML = "00:00 / 00:00";
     
@@ -77,28 +88,51 @@ const playMusic = (track, pause = false) => {
         li.style.backgroundColor = index === currentSongIndex ? "rgba(255, 255, 255, 0.1)" : "";
     });
     
+    if (!pause) {
+        // Use a promise to handle play() properly
+        currentSong.play().then(() => {
+            const playBtn = document.getElementById('play');
+            if (playBtn) playBtn.src = "img/pause.svg";
+        }).catch(error => {
+            console.log("Play interrupted:", error);
+            // This is normal when switching songs quickly
+        });
+    }
+    
     console.log(`Now playing: ${track} (index: ${currentSongIndex})`);
 }
 
 async function displayAlbums() {
     console.log("displaying albums");
-    // Load albums from catalog instead of directory listing
-    let catalogResponse = await fetch('./songs-catalog.json');
-    let catalog = await catalogResponse.json();
-    let cardContainer = document.querySelector(".cardContainer");
-    
-    for (const album of catalog.albums) {
-        cardContainer.innerHTML += `
-            <div data-folder="${album.folder}" class="card">
-                <div class="play">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M5 20V4L19 12L5 20Z" stroke="#141B34" fill="#000" stroke-width="1.5" stroke-linejoin="round" />
-                    </svg>
-                </div>
-                <img src="${album.cover}" alt="">
-                <h2>${album.title}</h2>
-                <p>${album.description}</p>
-            </div>`;
+    try {
+        // Load albums from catalog instead of directory listing
+        let catalogResponse = await fetch('./songs-catalog.json');
+        if (!catalogResponse.ok) {
+            throw new Error(`Failed to load catalog: ${catalogResponse.status}`);
+        }
+        let catalog = await catalogResponse.json();
+        let cardContainer = document.querySelector(".cardContainer");
+        
+        if (!cardContainer) {
+            console.error("Card container not found");
+            return;
+        }
+        
+        for (const album of catalog.albums) {
+            cardContainer.innerHTML += `
+                <div data-folder="${album.folder}" class="card">
+                    <div class="play">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M5 20V4L19 12L5 20Z" stroke="#141B34" fill="#000" stroke-width="1.5" stroke-linejoin="round" />
+                        </svg>
+                    </div>
+                    <img src="${album.cover}" alt="" onerror="this.src='img/music.svg'">
+                    <h2>${album.title}</h2>
+                    <p>${album.description}</p>
+                </div>`;
+        }
+    } catch (error) {
+        console.error("Error displaying albums:", error);
     }
 
     // Load the playlist whenever card is clicked
@@ -119,6 +153,17 @@ async function main() {
     const previous = document.getElementById('previous');
     const next = document.getElementById('next');
 
+    // Add error event listener for audio
+    currentSong.addEventListener("error", (e) => {
+        console.error("Audio error:", e);
+        play.src = "img/play.svg";
+    });
+
+    // Add loadstart event to handle loading states
+    currentSong.addEventListener("loadstart", () => {
+        console.log("Loading audio...");
+    });
+
     // Get the list of all the songs
     await getSongs("songs/fav");
     if (songs.length > 0) {
@@ -131,8 +176,12 @@ async function main() {
     // Attach an event listener to play, next and previous
     play.addEventListener("click", () => {
         if (currentSong.paused) {
-            currentSong.play();
-            play.src = "img/pause.svg";
+            currentSong.play().then(() => {
+                play.src = "img/pause.svg";
+            }).catch(error => {
+                console.log("Play failed:", error);
+                play.src = "img/play.svg";
+            });
         } else {
             currentSong.pause();
             play.src = "img/play.svg";
@@ -142,7 +191,11 @@ async function main() {
     // Listen for timeupdate event
     currentSong.addEventListener("timeupdate", () => {
         document.querySelector(".songtime").innerHTML = `${secondsToMinutesSeconds(currentSong.currentTime)} / ${secondsToMinutesSeconds(currentSong.duration)}`;
-        document.querySelector(".circle").style.left = (currentSong.currentTime / currentSong.duration) * 100 + "%";
+        
+        // Only update progress if duration is valid
+        if (currentSong.duration && !isNaN(currentSong.duration) && currentSong.duration > 0) {
+            document.querySelector(".circle").style.left = (currentSong.currentTime / currentSong.duration) * 100 + "%";
+        }
     });
 
     // Auto-play next song when current song ends
@@ -157,7 +210,11 @@ async function main() {
     document.querySelector(".seekbar").addEventListener("click", e => {
         let percent = (e.offsetX / e.target.getBoundingClientRect().width) * 100;
         document.querySelector(".circle").style.left = percent + "%";
-        currentSong.currentTime = ((currentSong.duration) * percent) / 100;
+        
+        // Only seek if duration is valid
+        if (currentSong.duration && !isNaN(currentSong.duration) && currentSong.duration > 0) {
+            currentSong.currentTime = ((currentSong.duration) * percent) / 100;
+        }
     });
 
     // Add an event listener for hamburger

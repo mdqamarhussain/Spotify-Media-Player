@@ -205,12 +205,25 @@ async function main() {
 
     // Add an event listener to seekbar
     document.querySelector(".seekbar").addEventListener("click", e => {
-        let percent = (e.offsetX / e.target.getBoundingClientRect().width) * 100;
-        document.querySelector(".circle").style.left = percent + "%";
+        const seekbar = document.querySelector(".seekbar");
+        const rect = seekbar.getBoundingClientRect();
+        const clickX = e.clientX - rect.left;
+        const percent = (clickX / rect.width) * 100;
         
-        // Only seek if duration is valid
-        if (currentSong.duration && !isNaN(currentSong.duration) && currentSong.duration > 0) {
-            currentSong.currentTime = ((currentSong.duration) * percent) / 100;
+        // Clamp percent between 0 and 100
+        const clampedPercent = Math.max(0, Math.min(100, percent));
+        
+        console.log(`Seekbar clicked: ${clampedPercent.toFixed(1)}%, duration: ${currentSong.duration}`);
+        
+        document.querySelector(".circle").style.left = clampedPercent + "%";
+        
+        // Only seek if duration is valid and audio is ready
+        if (currentSong.duration && !isNaN(currentSong.duration) && currentSong.duration > 0 && currentSong.readyState >= 1) {
+            const newTime = ((currentSong.duration) * clampedPercent) / 100;
+            currentSong.currentTime = newTime;
+            console.log(`Seeking to: ${newTime.toFixed(1)}s`);
+        } else {
+            console.log(`Cannot seek: duration=${currentSong.duration}, readyState=${currentSong.readyState}`);
         }
     });
 

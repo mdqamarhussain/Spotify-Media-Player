@@ -41,11 +41,11 @@ To add new songs and albums:
    {
      "albums": [
        {
-         "folder": "fav",
-         "title": "Favourite",
-         "description": "Your favourite playlists! ~ Delusion.",
-         "cover": "songs/fav/cover.jpg",
-         "songs": ["I Love You.mp3", "Jannatein Kahan.mp3", "Mat Aazma Re.mp3", "Mere Mehboob Qayamat Hogi.mp3"]
+         "folder": "Pop",
+         "title": "Pop Hits",
+         "description": "Catchy pop songs for every mood",
+         "cover": "songs/Pop/Pop Cover.png",
+         "songs": ["Golden Echoes.mp3", "Starlight Carousel.mp3", "Upbeat Summer.mp3", "Whip Afro Dancehall.mp3"]
        },
        {
          "folder": "rock",

@@ -162,7 +162,7 @@ async function main() {
     });
 
     // Get the list of all the songs
-    await getSongs("songs/fav");
+    await getSongs("songs/Pop");
     if (songs.length > 0) {
         playMusic(songs[0], true);
     }

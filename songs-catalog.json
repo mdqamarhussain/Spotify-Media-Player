@@ -1,15 +1,87 @@
 {
   "albums": [
     {
-      "folder": "fav",
-      "title": "Favourite",
-      "description": "Your favourite playlists! ~ Delusion.",
-      "cover": "songs/fav/cover.jpg",
+      "folder": "Classical",
+      "title": "Classical Masterpieces",
+      "description": "Timeless classical compositions for the soul",
+      "cover": "songs/Classical/Classical Cover.png",
       "songs": [
-        "I Love You.mp3",
-        "Jannatein Kahan.mp3",
-        "Mat Aazma Re.mp3",
-        "Mere Mehboob Qayamat Hogi.mp3"
+        "Celestial Requiem.mp3",
+        "Moonlight Sonata.mp3",
+        "The Clockwork Overture.mp3",
+        "Whispers of the Silver Violin.mp3"
+      ]
+    },
+    {
+      "folder": "Rock",
+      "title": "Rock Anthems",
+      "description": "High-energy rock tracks that electrify",
+      "cover": "songs/Rock/Rock Cover.png",
+      "songs": [
+        "Ashes in the Thunder.mp3",
+        "Crimson Revolt.mp3",
+        "Fractured Skyline.mp3",
+        "Neon Veins.mp3"
+      ]
+    },
+    {
+      "folder": "Pop",
+      "title": "Pop Hits",
+      "description": "Catchy pop songs for every mood",
+      "cover": "songs/Pop/Pop Cover.png",
+      "songs": [
+        "Golden Echoes.mp3",
+        "Starlight Carousel.mp3",
+        "Upbeat Summer.mp3",
+        "Whip Afro Dancehall.mp3"
+      ]
+    },
+    {
+      "folder": "Jazz",
+      "title": "Jazz Lounge",
+      "description": "Smooth jazz vibes for relaxation",
+      "cover": "songs/Jazz/Jazz Cover.png",
+      "songs": [
+        "Café Lament.mp3",
+        "Crimson Sax Reverie.mp3",
+        "Midnight Blue Groove.mp3",
+        "Velvet Smoke Swing.mp3"
+      ]
+    },
+    {
+      "folder": "Hip Hop",
+      "title": "Hip Hop Beats",
+      "description": "Urban rhythms and powerful lyrics",
+      "cover": "songs/Hip Hop/Hip Hop Cover.png",
+      "songs": [
+        "Cipher of Shadows.mp3",
+        "Concrete Dreams.mp3",
+        "Echoes of the Block.mp3",
+        "Grind & Glory.mp3"
+      ]
+    },
+    {
+      "folder": "Folk",
+      "title": "Folk Stories",
+      "description": "Acoustic tales from the heart",
+      "cover": "songs/Folk/Folk Cover.png",
+      "songs": [
+        "Echoes of the Oak.mp3",
+        "Lanterns on the Riverbend.mp3",
+        "Wanderer's Hearth.mp3",
+        "Whispers of the Wildflowers.mp3"
+      ]
+    },
+    {
+      "folder": "Metal",
+      "title": "Metal Storm",
+      "description": "Heavy metal intensity unleashed",
+      "cover": "songs/Metal/Metal Cover.png",
+      "songs": [
+        "650 Feet Below.mp3",
+        "Ashes of the Hollow Crown.mp3",
+        "Bloodforge Eclipse.mp3",
+        "Iron Veins, Broken Sky.mp3"
       ]
     }
   ]
